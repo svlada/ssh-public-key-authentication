@@ -47,8 +47,7 @@ public class PublicKeySshSession {
 				jsch.addIdentity(privateKeyPath);
 
 				session = jsch.getSession(username, host, port);
-				session.setConfig("PreferredAuthentications",
-						"publickey,keyboard-interactive,password");
+				session.setConfig("PreferredAuthentications", "publickey,keyboard-interactive,password");
 
 				java.util.Properties config = new java.util.Properties();
 				config.put("StrictHostKeyChecking", "no");
