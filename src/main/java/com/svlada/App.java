@@ -48,8 +48,7 @@ public class App {
 		try {
 			properties.load(App.class.getClassLoader().getResourceAsStream("config/" + profile + "/ssh.config"));
 		} catch (IOException e) {
-			logger.error("Failed to load properties.", e);
-			return null;
+			throw new RuntimeException("Failed to load properties.", e);
 		}
         
 		return properties;
