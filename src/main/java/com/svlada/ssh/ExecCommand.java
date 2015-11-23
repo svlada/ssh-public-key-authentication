@@ -19,7 +19,7 @@ public class ExecCommand {
 			throw new IllegalArgumentException("Session object is null.");
 		}
 		
-		if (command != null && !command.isEmpty()) {
+		if (command != null && command.isEmpty()) {
 			throw new IllegalArgumentException("SSH command is blank.");
 		}
 		
