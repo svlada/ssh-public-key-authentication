@@ -2,6 +2,8 @@ package com.svlada.ssh;
 
 import org.apache.commons.lang3.Validate;
 
+import com.jcraft.jsch.Channel;
+import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
@@ -14,7 +16,41 @@ import com.svlada.ssh.logger.JschLogger;
  *
  */
 public class PublicKeySshSession {
+	
+	final Session session;
+	
+	public PublicKeySshSession(final Session session) {
+		this.session = session;
+	}
 
+	public void execute(String command) {
+		
+		if (session == null) {
+			throw new IllegalArgumentException("Session object is null.");
+		}
+		
+		if (command != null && command.isEmpty()) {
+			throw new IllegalArgumentException("SSH command is blank.");
+		}
+		
+		try {
+			
+			session.connect();
+			
+			Channel channel = session.openChannel("exec");
+			((ChannelExec) channel).setCommand(command);
+			((ChannelExec) channel).setPty(false);
+			
+			channel.connect();
+			
+			channel.disconnect();
+			session.disconnect();
+			
+		} catch (JSchException e) {
+			throw new RuntimeException("Error durring SSH command execution. Command: " + command);
+		}
+	}
+	
 	public static class Builder {
 		private String host;
 		private String username;
@@ -31,7 +67,7 @@ public class PublicKeySshSession {
 			}
 		}
 
-		public Session build() {
+		public PublicKeySshSession build() {
 			validate();
 
 			if (logger != null) {
@@ -58,7 +94,7 @@ public class PublicKeySshSession {
 				throw new RuntimeException("Failed to create Jsch Session object.", e);
 			}
 
-			return session;
+			return new PublicKeySshSession(session);
 		}
 
 		public Builder logger(com.jcraft.jsch.Logger logger) {

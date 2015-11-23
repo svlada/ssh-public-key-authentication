@@ -5,8 +5,6 @@ import java.util.Properties;
 
 import org.apache.log4j.Logger;
 
-import com.jcraft.jsch.Session;
-import com.svlada.ssh.ExecCommand;
 import com.svlada.ssh.PublicKeySshSession;
 import com.svlada.ssh.logger.JschLogger;
 
@@ -24,7 +22,7 @@ public class App {
 		
 		Properties config = App.getConfig(args);
 		
-		final Session session = new PublicKeySshSession.Builder()
+		final PublicKeySshSession session = new PublicKeySshSession.Builder()
 			.host(config.getProperty("host"))
 			.username(config.getProperty("username"))
 			.privateKeyPath(config.getProperty("privateKeyPath"))
@@ -36,8 +34,7 @@ public class App {
 			System.exit(-1);
 		}
 		
-		ExecCommand command = new ExecCommand();
-		command.execute(session, "echo \"Sit down, relax, mix yourself a drink and enjoy the show...\" >> /tmp/test.out");
+		session.execute("echo \"Sit down, relax, mix yourself a drink and enjoy the show...\" >> /tmp/test.out");
 		
 	}
 	
