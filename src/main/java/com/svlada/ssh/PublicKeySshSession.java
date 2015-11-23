@@ -56,8 +56,7 @@ public class PublicKeySshSession {
 				session.setConfig(config);
 
 			} catch (JSchException e) {
-				logger.log(com.jcraft.jsch.Logger.ERROR, e.getMessage());
-				return null;
+				throw new RuntimeException("Failed to create Jsch Session object.", e);
 			}
 
 			return session;
