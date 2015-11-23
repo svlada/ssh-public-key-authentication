@@ -1,7 +1,5 @@
 package com.svlada.ssh;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSchException;
@@ -21,7 +19,7 @@ public class ExecCommand {
 			throw new IllegalArgumentException("Session object is null.");
 		}
 		
-		if (command == null || StringUtils.isBlank(command)) {
+		if (command != null && !command.isEmpty()) {
 			throw new IllegalArgumentException("SSH command is blank.");
 		}
 		
