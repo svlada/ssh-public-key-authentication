@@ -14,7 +14,7 @@ import com.svlada.ssh.logger.JschLogger;
  *
  */
 public class PublicKeySshSession {
-	
+
 	public static class Builder {
 		private String host;
 		private String username;
@@ -37,7 +37,7 @@ public class PublicKeySshSession {
 			if (logger != null) {
 				JSch.setLogger(new JschLogger());
 			}
-			
+
 			JSch jsch = new JSch();
 
 			Session session = null;
@@ -45,20 +45,21 @@ public class PublicKeySshSession {
 			try {
 
 				jsch.addIdentity(privateKeyPath);
-			    
+
 				session = jsch.getSession(username, host, port);
-				session.setConfig("PreferredAuthentications", "publickey,keyboard-interactive,password");
-				
-				java.util.Properties config = new java.util.Properties(); 
+				session.setConfig("PreferredAuthentications",
+						"publickey,keyboard-interactive,password");
+
+				java.util.Properties config = new java.util.Properties();
 				config.put("StrictHostKeyChecking", "no");
-				
+
 				session.setConfig(config);
-				
+
 			} catch (JSchException e) {
 				logger.log(com.jcraft.jsch.Logger.ERROR, e.getMessage());
 				return null;
 			}
-			
+
 			return session;
 		}
 
@@ -66,7 +67,7 @@ public class PublicKeySshSession {
 			this.logger = logger;
 			return this;
 		}
-		
+
 		public Builder host(String host) {
 			this.host = host;
 			return this;
