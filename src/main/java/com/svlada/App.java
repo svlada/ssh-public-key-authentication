@@ -44,20 +44,20 @@ public class App {
 	public static Properties getConfig(String[] args) {
 		String profile = "local";
 		
-        if (args != null && args.length > 0) {
-        	profile = args[0];
-        }
+		if (args != null && args.length > 0) {
+			profile = args[0];
+		}
         
-        Properties properties = new Properties();
+		Properties properties = new Properties();
         
-        try {
+		try {
 			properties.load(App.class.getClassLoader().getResourceAsStream("config/" + profile + "/ssh.config"));
 		} catch (IOException e) {
 			logger.error("Failed to load properties.", e);
 			return null;
 		}
         
-        return properties;
+		return properties;
 	}
 
 }
