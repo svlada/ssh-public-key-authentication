@@ -22,13 +22,11 @@ public class App {
 		
 		Properties config = App.getConfig(args);
 		
-		final PublicKeySshSession session = new PublicKeySshSession.Builder()
-			.host(config.getProperty("host"))
-			.username(config.getProperty("username"))
-			.privateKeyPath(config.getProperty("privateKeyPath"))
-			.port(Integer.parseInt(config.getProperty("port")))
-			.logger(new JschLogger())
-			.build();
+		final PublicKeySshSession session = new PublicKeySshSession.Builder(
+				config.getProperty("host"), 
+				config.getProperty("username"), 
+				Integer.parseInt(config.getProperty("port")), 
+				config.getProperty("privateKeyPath")).logger(new JschLogger()).build();
 		
 		if (session == null) {
 			System.exit(-1);

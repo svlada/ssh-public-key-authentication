@@ -1,5 +1,8 @@
 package com.svlada.ssh;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import org.apache.commons.lang3.Validate;
 
 import com.jcraft.jsch.Channel;
@@ -19,12 +22,11 @@ public class PublicKeySshSession {
 	
 	final Session session;
 	
-	public PublicKeySshSession(final Session session) {
-		this.session = session;
+	public PublicKeySshSession(final Builder builder) {
+		this.session = builder.jschSession;
 	}
 
 	public void execute(String command) {
-		
 		if (session == null) {
 			throw new IllegalArgumentException("Session object is null.");
 		}
@@ -55,13 +57,22 @@ public class PublicKeySshSession {
 		private String host;
 		private String username;
 		private int port;
-		private String privateKeyPath;
+		private Path privateKeyPath;
 		private com.jcraft.jsch.Logger logger;
+		
+		private Session jschSession;
 
+		public Builder(String host, String username, int port, String path) {
+			this.host = host;
+			this.username = username;
+			this.port = port;
+			this.privateKeyPath = Paths.get(path);
+		}
+		
 		private void validate() {
 			Validate.notBlank(host);
 			Validate.notBlank(username);
-			Validate.notBlank(privateKeyPath);
+			
 			if (port < 1) {
 				throw new IllegalArgumentException("Port number must start with 1.");
 			}
@@ -80,7 +91,7 @@ public class PublicKeySshSession {
 
 			try {
 
-				jsch.addIdentity(privateKeyPath);
+				jsch.addIdentity(privateKeyPath.toString());
 
 				session = jsch.getSession(username, host, port);
 				session.setConfig("PreferredAuthentications", "publickey,keyboard-interactive,password");
@@ -93,32 +104,14 @@ public class PublicKeySshSession {
 			} catch (JSchException e) {
 				throw new RuntimeException("Failed to create Jsch Session object.", e);
 			}
+			
+			this.jschSession = session;
 
-			return new PublicKeySshSession(session);
+			return new PublicKeySshSession(this);
 		}
 
 		public Builder logger(com.jcraft.jsch.Logger logger) {
 			this.logger = logger;
-			return this;
-		}
-
-		public Builder host(String host) {
-			this.host = host;
-			return this;
-		}
-
-		public Builder username(String username) {
-			this.username = username;
-			return this;
-		}
-
-		public Builder port(int port) {
-			this.port = port;
-			return this;
-		}
-
-		public Builder privateKeyPath(String privateKeyPath) {
-			this.privateKeyPath = privateKeyPath;
 			return this;
 		}
 
