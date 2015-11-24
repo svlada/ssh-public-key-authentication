@@ -63,16 +63,13 @@ public class PublicKeySshSession {
 		private Session jschSession;
 
 		public Builder(String host, String username, int port, String path) {
-			this.host = host;
-			this.username = username;
+			this.host = Validate.notBlank(host);
+			this.username = Validate.notBlank(username);
 			this.port = port;
 			this.privateKeyPath = Paths.get(path);
 		}
 		
 		private void validate() {
-			Validate.notBlank(host);
-			Validate.notBlank(username);
-			
 			if (port < 1) {
 				throw new IllegalArgumentException("Port number must start with 1.");
 			}
