@@ -1,4 +1,5 @@
-# Introduction
-Using SSH public-key authentication to connect to a remote system.
+# SSH Public Key Authentication
 
-More details on the following [URL](http://www.svlada.com/ssh-public-key-authentication/).
+Connecting to a remote system using SSH public-key authentication.
+
+Please visit the following [URL](http://www.svlada.com/ssh-public-key-authentication/) for further information.
